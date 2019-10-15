@@ -1,11 +1,20 @@
 ﻿using SQLite;
 
+public enum PlayerClass
+{
+    Bard,
+    Warrior,
+    Mage,
+    Ranger,
+    Priest
+}
+
 [Table("PlayerData")]
 public class PlayerData
 {
     [Column("ID")]
     public int ID { get; set; }
-    
+
     [Column("Name")]
     public string Name { get; set; }
 
@@ -19,5 +28,10 @@ public class PlayerData
     public int Credits { get; set; }
 
     [Column("Class")]
-    public int Class { get; set; }
+    public PlayerClass Class { get; set; }
+
+    public override string ToString()
+    {
+        return $"Player (ID: {ID}; Name: {Name}; Health: {Health}; Mana: {Mana}; Credits: {Credits}; Class: {Class})";
+    }
 }
