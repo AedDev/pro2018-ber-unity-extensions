@@ -101,9 +101,6 @@ public class DatabaseWindow : EditorWindow
 
         SQLiteConnectionString connectionString = new SQLiteConnectionString(dbPath);
         Connection = new SQLiteConnection(connectionString);
-
-        PlayerData player = Connection.Find<PlayerData>(1);
-        Debug.Log(player);
     }
 
     private void Disconnect()

@@ -1,4 +1,6 @@
 ﻿using SQLite;
+using System;
+using UnityEngine;
 
 public enum PlayerClass
 {
@@ -9,6 +11,7 @@ public enum PlayerClass
     Priest
 }
 
+[Serializable]
 [Table("PlayerData")]
 public class PlayerData
 {
