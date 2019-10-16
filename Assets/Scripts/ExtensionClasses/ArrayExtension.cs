@@ -2,18 +2,23 @@
 
 public static class ArrayExtension
 {
-    public static string[] ToStringArray<T>(this T[] arr) // where T : PlayerData
+    public static string[] ToStringArray<T>(this T[] arr, params string[] initialValues) // where T : PlayerData
     {
         if (arr == null)
             return null;
 
-        string[] sarr = new string[arr.Length];
-        for (int i = 0; i < sarr.Length; i++)
+        string[] sarr = new string[arr.Length + initialValues.Length];
+        for (int i = 0; i < initialValues.Length; i++)
+        {
+            sarr[i] = initialValues[i];
+        }
+
+        for (int i = 0; i < arr.Length; i++)
         {
             if (typeof(T) == typeof(PlayerData))
-                sarr[i] = (arr[i] as PlayerData).Name;
+                sarr[initialValues.Length + i] = (arr[i] as PlayerData).Name;
             else
-                sarr[i] = arr[i].ToString();
+                sarr[initialValues.Length + i] = arr[i].ToString();
         }
 
         return sarr;

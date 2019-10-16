@@ -55,7 +55,7 @@ public class DatabaseWindow : EditorWindow
             GUILayout.Label("Database:", GUILayout.Width(70));
             EditorGUI.BeginDisabledGroup(true);
             {
-                GUILayout.TextField(dbPath);
+                GUILayout.TextField(dbPath, GUILayout.MaxWidth(170));
             }
             EditorGUI.EndDisabledGroup();
 
@@ -65,7 +65,12 @@ public class DatabaseWindow : EditorWindow
                 string defaultDirectory = Application.dataPath;
                 string[] fileFilter = new string[] { "SQLite Database", "sqlite,db" };
 
-                dbPath = EditorUtility.OpenFilePanelWithFilters("Open Database", defaultDirectory, fileFilter);
+                string path = EditorUtility.OpenFilePanelWithFilters("Open Database", defaultDirectory, fileFilter);
+                if (File.Exists(path))
+                {
+                    Disconnect();
+                    dbPath = path;
+                }
             }
         }
         GUILayout.EndHorizontal();
@@ -97,6 +102,9 @@ public class DatabaseWindow : EditorWindow
 
     private void Connect()
     {
+        if (IsConnected)
+            Disconnect();
+
         EditorPrefs.SetString("DB_PATH", dbPath);
 
         SQLiteConnectionString connectionString = new SQLiteConnectionString(dbPath);
@@ -105,7 +113,7 @@ public class DatabaseWindow : EditorWindow
 
     private void Disconnect()
     {
-        if (Connection == null)
+        if (!IsConnected)
             return;
 
         Connection.Close();

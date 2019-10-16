@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System;
 
 [CustomEditor(typeof(Player))]
 public class PlayerDataInspector : Editor
@@ -9,6 +10,11 @@ public class PlayerDataInspector : Editor
     private Player player;
     private PlayerData[] playerData;
     private int playerDataIndex;
+
+    private bool HasData
+    {
+        get => playerData != null && playerData.Length > 0;
+    }
 
     private void OnEnable()
     {
@@ -24,23 +30,58 @@ public class PlayerDataInspector : Editor
             return;
         }
 
-        if (playerData == null)
-            return;
-
-        playerDataIndex = EditorGUILayout.Popup(playerDataIndex, playerData.ToStringArray());
-
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Save"))
+        if (HasData)
         {
-            player.playerDataId = playerData[playerDataIndex].ID;
-            EditorUtility.SetDirty(target);
+            playerDataIndex = EditorGUILayout.Popup(playerDataIndex + 1, playerData.ToStringArray("None")) - 1;
         }
-
-        if (GUILayout.Button("Reload"))
+        else
         {
-            ReloadPlayerData();
+            EditorGUILayout.Popup(0, new string[] { "<No Entries>" });
+        }
+        
+        EditorGUILayout.BeginHorizontal();
+        {
+            EditorGUI.BeginDisabledGroup(!HasData);
+            {
+                if (GUILayout.Button("Save"))
+                {
+                    if (playerDataIndex >= 0)
+                    {
+                        player.playerDataId = playerData[playerDataIndex].ID;
+                    }
+                    else
+                    {
+                        player.playerDataId = -1;
+                    }
+                    
+                    EditorUtility.SetDirty(target);
+                }
+            }
+            EditorGUI.EndDisabledGroup();
+
+            if (GUILayout.Button("Reload"))
+            {
+                ReloadPlayerData();
+            }
         }
         EditorGUILayout.EndHorizontal();
+
+        if (GUILayout.Button("New Entry"))
+        {
+            CreateNewEntry();
+        }
+    }
+
+    private void CreateNewEntry()
+    {
+        PlayerData data = new PlayerData()
+        {
+            ID = 0,
+            Name = "New Player"
+        };
+
+        DatabaseWindow.Connection.Insert(data, typeof(PlayerData));
+        ReloadPlayerData();
     }
 
     private void ReloadPlayerData()
@@ -49,7 +90,7 @@ public class PlayerDataInspector : Editor
             return;
 
         playerData = DatabaseWindow.Connection.Query<PlayerData>("SELECT * FROM PlayerData").ToArray();
-
+        
         //for (int i = 0; i < playerData.Length; i++)
         //{
         //    if (playerData[i].ID == player.playerDataId)
