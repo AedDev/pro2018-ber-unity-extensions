@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using SQLite;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 public class DatabaseWindow : EditorWindow
 {
@@ -96,6 +98,15 @@ public class DatabaseWindow : EditorWindow
                 }
             }
             EditorGUI.EndDisabledGroup();
+        }
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        {
+            if (GUILayout.Button("Apply to DatabaseManager"))
+            {
+                DatabaseManager.Instance.databasePath = dbPath;
+            }
         }
         GUILayout.EndHorizontal();
     }
