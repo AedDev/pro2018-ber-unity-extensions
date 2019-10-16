@@ -15,8 +15,8 @@ public enum PlayerClass
 [Table("PlayerData")]
 public class PlayerData
 {
-    [Column("ID")]
-    public int ID { get; set; }
+    [Column("ID"), PrimaryKey]
+    public int? ID { get; set; }
 
     [Column("Name")]
     public string Name { get; set; }
