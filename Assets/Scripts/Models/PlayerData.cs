@@ -2,13 +2,14 @@
 using System;
 using UnityEngine;
 
+[Flags]
 public enum PlayerClass
 {
-    Bard,
-    Warrior,
-    Mage,
-    Ranger,
-    Priest
+    Bard    = 1,  // 0000 0001
+    Warrior = 2,  // 0000 0010
+    Mage    = 4,  // 0000 0100
+    Ranger  = 8,  // 0000 1000
+    Priest  = 16  // 0001 0000
 }
 
 [Serializable]

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using System;
 
@@ -241,7 +239,7 @@ public class PlayerDataInspector : Editor
             EditorGUILayout.LabelField(label, GUILayout.Width(labelWidth));
             EditorGUI.BeginDisabledGroup(disabled);
             {
-                returnValue = EditorGUILayout.EnumPopup(value);
+                returnValue = EditorGUILayout.EnumFlagsField(value);
             }
             EditorGUI.EndDisabledGroup();
         }
